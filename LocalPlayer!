@@ -421,6 +421,16 @@ local function CharacterAdded(Character)
 					GetItem(PrisonITEMS.giver[Tools[2]])
 					GetItem(PrisonITEMS.giver[Tools[3]])
 					GetItem(PrisonITEMS.giver[Tools[4]])
+					if States.AutoTools then
+						if LocalPlayer.TeamColor.Name == "Bright blue" then
+							if Swat then
+								GetItem(PrisonITEMS.giver["Riot Shield"])
+							end
+						else
+							GetItem(PrisonITEMS.single["Crude Knife"])
+							GetItem(PrisonITEMS.single["Hammer"])
+						end
+					end
 				end
 			end
 		end
@@ -560,8 +570,8 @@ local function ChatCommands(ExecuteCommands)
 				GetItem(PrisonITEMS.giver["Riot Shield"])
 			end
 		else
-			GetItem(PrisonITEMS.giver["Crude Knife"])
-			GetItem(PrisonITEMS.single["Hamer"])
+			GetItem(PrisonITEMS.single["Crude Knife"])
+			GetItem(PrisonITEMS.single["Hammer"])
 		end
 	end
 	--// Gun Modification:
@@ -726,6 +736,15 @@ local function ChatCommands(ExecuteCommands)
 			States.AutoGuns = false
 		end
 	end
+	if FindCommand("autotools") or FindCommand("autot") then
+		if Args[2] == "on" then
+			States.AutoTools = true
+			States.AutoGuns = true
+		elseif Args[2] == "off" then
+			States.AutoTools = false
+			States.AutoGuns = false
+		end
+	end
 	if FindCommand("fastpunch") or FindCommand("fp") then
 		if Args[2] == "on" then
 			States.FastPunch = true
@@ -845,7 +864,7 @@ local function ChatCommands(ExecuteCommands)
 		GetItem(PrisonITEMS.buttons["Prison Gate"]["Prison Gate"])
 	end
 	if FindCommand("getposition") or FindCommand("getpos") then
-		print("HumanoidRootPart Position: "..LocalPlayer.Character.HumanoidRootPart.Position)
+		print("HumanoidRootPart CFrame: "..LocalPlayer.Character.HumanoidRootPart.CFrame)
 		print("Camera CFrame: "..workspace.CurrentCamera.CFrame)
 	end
 	if FindCommand("saveposition") or FindCommand("savepos") then
@@ -1050,6 +1069,12 @@ getgenv().DisableScript = function()
 		Chat("Unloaded")
 	end)
 end
+
+--// Extras:
+game.CoreGui.RobloxGui.Backpack.Changed:Connect(function()
+	game.StarterGui:SetCoreGuiEnabled(Enum.CoreGuiType.Backpack,true)
+end)
+LocalPlayer.PlayerGui.Home.fadeFrame.Visible = false
 
 LocalPlayer.Character:BreakJoints()
 Respawn(LocalPlayer.TeamColor.Name)
