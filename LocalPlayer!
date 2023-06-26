@@ -693,7 +693,7 @@ local function ChatCommands(ExecuteCommands)
 		Excluded = {}
 	end
 	if FindCommand("teleport") or FindCommand("goto") or FindCommand("to") then
-		LocalPlayer.Character.HumanoidRootPart.CFrame = GetPlayer(Args[2]).Character.HumanoidRootPart.CFrame
+		LocalPlayer.Character.HumanoidRootPart.CFrame = GetPlayer(Args[2])
 	end
 	if FindCommand("spectate") or FindCommand("view") then
 		if GetPlayer(Args[2]) ~= nil then
@@ -864,8 +864,8 @@ local function ChatCommands(ExecuteCommands)
 		GetItem(PrisonITEMS.buttons["Prison Gate"]["Prison Gate"])
 	end
 	if FindCommand("getposition") or FindCommand("getpos") then
-		print("HumanoidRootPart CFrame: "..LocalPlayer.Character.HumanoidRootPart.CFrame)
-		print("Camera CFrame: "..workspace.CurrentCamera.CFrame)
+		print("HumanoidRootPart CFrame: "..tostring(LocalPlayer.Character.HumanoidRootPart.CFrame))
+		print("Camera CFrame: "..tostring(workspace.CurrentCamera.CFrame))
 	end
 	if FindCommand("saveposition") or FindCommand("savepos") then
 		States.SavedPosition = LocalPlayer.Character.HumanoidRootPart.CFrame
