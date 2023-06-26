@@ -1,0 +1,1061 @@
+--// LocalPlayer edited by h.ack
+
+--[[
+	██╗░░░░░░█████╗░░█████╗░░█████╗░██╗░░░░░  ██████╗░██╗░░░░░░█████╗░██╗░░░██╗███████╗██████╗░
+	██║░░░░░██╔══██╗██╔══██╗██╔══██╗██║░░░░░  ██╔══██╗██║░░░░░██╔══██╗╚██╗░██╔╝██╔════╝██╔══██╗
+	██║░░░░░██║░░██║██║░░╚═╝███████║██║░░░░░  ██████╔╝██║░░░░░███████║░╚████╔╝░█████╗░░██████╔╝
+	██║░░░░░██║░░██║██║░░██╗██╔══██║██║░░░░░  ██╔═══╝░██║░░░░░██╔══██║░░╚██╔╝░░██╔══╝░░██╔══██╗
+	███████╗╚█████╔╝╚█████╔╝██║░░██║███████╗  ██║░░░░░███████╗██║░░██║░░░██║░░░███████╗██║░░██║
+	╚══════╝░╚════╝░░╚════╝░╚═╝░░╚═╝╚══════╝  ╚═╝░░░░░╚══════╝╚═╝░░╚═╝░░░╚═╝░░░╚══════╝╚═╝░░╚═╝ 
+																								]]--
+repeat task.wait() until game:IsLoaded()
+
+--// UI:
+local CmdGui = Instance.new("ScreenGui")
+local Background = Instance.new("Frame")
+local CmdName = Instance.new("TextLabel")
+local FindCmd = Instance.new("TextBox")
+local CmdHandler = Instance.new("ScrollingFrame")
+local CmdText = Instance.new("TextLabel")
+local UIListLayout = Instance.new("UIListLayout")
+local Background2 = Instance.new("Frame")
+local Label = Instance.new("TextLabel")
+local Execute = Instance.new("TextBox")
+local Minimum = Instance.new("TextButton")
+local Close = Instance.new("TextButton")
+local Prefix = ";"
+
+CmdGui.Name = "CmdGui"
+CmdGui.Parent = game:GetService("CoreGui")
+CmdGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+Background.Name = "Background"
+Background.Parent = CmdGui
+Background.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+Background.BorderSizePixel = 0
+Background.Position = UDim2.new(0.368556708, 0, 0.11490047, 0)
+Background.Size = UDim2.new(0, 350, 0, 350)
+Background.Active = true
+Background.Draggable = true
+
+CmdName.Name = "CmdName"
+CmdName.Parent = Background
+CmdName.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+CmdName.BorderSizePixel = 0
+CmdName.Size = UDim2.new(0, 350, 0, 25)
+CmdName.Font = Enum.Font.GothamBlack
+CmdName.Text = "Commands"
+CmdName.TextColor3 = Color3.fromRGB(255, 255, 255)
+CmdName.TextScaled = true
+CmdName.TextSize = 14.000
+CmdName.TextWrapped = true
+
+FindCmd.Name = "FindCmd"
+FindCmd.Parent = Background
+FindCmd.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+FindCmd.BorderColor3 = Color3.fromRGB(0, 255, 0)
+FindCmd.BorderSizePixel = 0
+FindCmd.Position = UDim2.new(0.0714285746, 0, 0.0702347234, 0)
+FindCmd.Size = UDim2.new(0, 300, 0, 20)
+FindCmd.Font = Enum.Font.SourceSans
+FindCmd.PlaceholderColor3 = Color3.fromRGB(255, 255, 255)
+FindCmd.PlaceholderText = "Search For Command"
+FindCmd.Text = ""
+FindCmd.TextColor3 = Color3.fromRGB(255, 255, 255)
+FindCmd.TextSize = 14.000
+FindCmd.TextWrapped = true
+
+CmdHandler.Name = "CmdHandler"
+CmdHandler.Parent = Background
+CmdHandler.Active = true
+CmdHandler.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+CmdHandler.BackgroundTransparency = 1.000
+CmdHandler.BorderSizePixel = 0
+CmdHandler.AutomaticCanvasSize = "Y"
+CmdHandler.Position = UDim2.new(0.0714285746, 0, 0.142857149, 0)
+CmdHandler.Size = UDim2.new(0, 300, 0, 290)
+CmdHandler.ScrollBarThickness = 2
+
+CmdText.Name = "CmdText"
+CmdText.Parent = nil
+CmdText.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+CmdText.BackgroundTransparency = 1.000
+CmdText.BorderSizePixel = 0
+CmdText.Size = UDim2.new(0, 300, 0, 25)
+CmdText.Font = Enum.Font.SourceSans
+CmdText.Text = "Text"
+CmdText.TextColor3 = Color3.fromRGB(255, 255, 255)
+CmdText.TextScaled = true
+CmdText.TextSize = 14.000
+CmdText.TextWrapped = true
+
+UIListLayout.Parent = CmdHandler
+UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+
+Minimum.Name = "Minimum"
+Minimum.Parent = Background
+Minimum.BackgroundColor3 = Color3.fromRGB(0, 155, 155)
+Minimum.BorderSizePixel = 0
+Minimum.Position = UDim2.new(0.842857122, 0, 0.00571428565, 0)
+Minimum.Size = UDim2.new(0, 20, 0, 20)
+Minimum.Font = Enum.Font.SourceSans
+Minimum.Text = ""
+Minimum.TextColor3 = Color3.fromRGB(255, 255, 255)
+Minimum.TextSize = 14.000
+Minimum.MouseButton1Click:Connect(function()
+	if Background.BackgroundTransparency == 0 then
+		Background.BackgroundTransparency = 1
+		Background.Size = UDim2.new(0, 350, 0, 25)
+		FindCmd.Visible = false
+		CmdHandler.Visible = false
+	elseif Background.BackgroundTransparency == 1 then
+		Background.BackgroundTransparency = 0
+		Background.Size = UDim2.new(0, 350, 0, 350)
+		FindCmd.Visible = true
+		CmdHandler.Visible = true
+	end
+end)
+
+Close.Name = "Close"
+Close.Parent = Background
+Close.BackgroundColor3 = Color3.fromRGB(155, 0, 0)
+Close.BorderSizePixel = 0
+Close.Position = UDim2.new(0.928571403, 0, 0.00571428565, 0)
+Close.Size = UDim2.new(0, 20, 0, 20)
+Close.Font = Enum.Font.SourceSans
+Close.Text = ""
+Close.TextColor3 = Color3.fromRGB(255, 255, 255)
+Close.TextSize = 14.000
+Close.MouseButton1Click:Connect(function()
+	Background.Visible = false
+end)
+
+-- New
+
+Background2.Name = "Background"
+Background2.Parent = CmdGui
+Background2.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+Background2.BorderSizePixel = 0
+Background2.Position = UDim2.new(0.012, 0, 0.807, 0)
+Background2.Size = UDim2.new(0, 250, 0, 80)
+Background2.Active = true
+Background2.Draggable = true
+
+Label.Name = "Label"
+Label.Parent = Background2
+Label.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+Label.BorderSizePixel = 0
+Label.Position = UDim2.new(0, 0, 0, 0)
+Label.Size = UDim2.new(0, 250, 0, 25)
+Label.Font = Enum.Font.GothamBlack
+Label.Text = "Execute Bar"
+Label.TextColor3 = Color3.fromRGB(255, 255, 255)
+Label.TextScaled = true
+Label.TextSize = 14.000
+Label.TextWrapped = true
+
+Execute.Name = "Execute"
+Execute.Parent = Background2
+Execute.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+Execute.BorderColor3 = Color3.fromRGB(0, 255, 0)
+Execute.Position = UDim2.new(0.097, 0, 0.436, 0)
+Execute.Size = UDim2.new(0, 200, 0, 30)
+Execute.Font = Enum.Font.SourceSans
+Execute.PlaceholderColor3 = Color3.fromRGB(255, 255, 255)
+Execute.PlaceholderText = "Press "..Prefix.." To Enter"
+Execute.Text = ""
+Execute.TextColor3 = Color3.fromRGB(255, 255, 255)
+Execute.TextSize = 18.000
+Execute.TextWrapped = true
+
+--// Services:
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
+local Lighting = game:GetService("Lighting")
+local Players = game:GetService("Players")
+local Teams = game:GetService("Teams")
+
+--// Remotes:
+local ReloadEvent = ReplicatedStorage.ReloadEvent
+local ItemHandler = workspace.Remote.ItemHandler
+local ShootEvent = ReplicatedStorage.ShootEvent
+local MeleeEvent = ReplicatedStorage.meleeEvent
+local TazePlayer = workspace.Remote.tazePlayer
+local TeamEvent = workspace.Remote.TeamEvent
+local Arrest = workspace.Remote.arrest
+
+--// Extras:
+local Swat = game:GetService("MarketplaceService"):UserOwnsGamePassAsync(Players.LocalPlayer.UserId, 96651)
+local CrimPad = workspace["Criminals Spawn"].SpawnLocation
+local PrisonITEMS = workspace.Prison_ITEMS
+local LocalPlayer = Players.LocalPlayer
+local Mouse = LocalPlayer:GetMouse()
+local ScriptDisabled = false
+local Slient = false
+local Version = "4.4"
+local Prefix = ";"
+
+--// Tables:
+local LoopKill, Excluded, LoopTase, Admin, Walls= {},{},{},{},{}
+local States = {
+	AutoRespawn = false,
+	AutoGuns = false,
+	AutoTools = false,
+	KillAura = false,
+	SuperPunch = false,
+	ForceField = false,
+	Notify = false,
+	SpamChat = false,
+	Noclip = false,
+	FastPunch = false,
+	Hold = false,
+	LPS = false,
+	AntiVoid = false,
+	SavedPosition = nil,
+	
+}
+local Commands = {
+	"Version "..Version,
+	"Script created by LocalPlayer#734, Edited by h.ack",
+	"cmds/cmd - Shows command bar",
+	"rejoin/rj - Rejoins the game",
+	"leave/leaveserver/quit - Leaves the server",
+	"giveadmin/admin [Player] - Gives player commands",
+	"removeadmin/unadmin [Player] - Removes player commands",
+	"kill [Player, Team, All] - Kills the player, team, all",
+	"tase [player] - Tases player",
+	"loopkill/lk [Player, Team, All] - Loopkills the player, team, all even if they rejoin",
+	"unloopkill/unlk [Player, Team, All] - Unloopkills player, team, all",
+	"exclude/ex [Player, Team] - Excludes player from kill or killaura",
+	"unexclude/unex [Player, Team] - Unexcludes player from kill or killaura",
+	"clearloopkill/clk - Removes everyone from loopkill",
+	"clearexcluded/ce - Removes everyone from excluded",
+	"team/t [Guard, Inmate, Criminal] - Changes to team guard, inmate, criminal",
+	"respawn/refresh/re - Respawns to old position",
+	"teleport/goto/to [Player] - Teleports you to player",
+	"arrest [Player, Team, All] -- Arrest the player, team, all",
+	"autorespawn/autorefresh/autore/auto [On/Off] -- Autorespawns on old position",
+	"killaura/ka [On/Off] - Activates kill aura",
+	"noclip - Enables you to walk through objects",
+	"clip - Disabled noclip",
+	"spectate/view [Player] -- Views the player",
+	"unspectate/unview [Player] - Unviews the player",
+	"fastpunch/speedpunch [On/Off] - Activates fast punch",
+	"superpunch/onpunch [On/Off] - Activates kill punch",
+	"changeprefix/newprefix/prefix/pref [Prefix] - Changes Prefix",
+	"getposition/getpos - Prints position",
+	"unload - unloads the gui",
+	"timeout/crash/lag - Timesout server",
+	"jumppower/jp [Ammount] - Sets JumpPower",
+	"walkspeed/speed/ws [Ammount] - Sets speed",
+	"hipheight/hh [Ammount] - Sets hipheight",
+	"gravity [Ammount] - Sets Gravity",
+	"resetgravity [Ammount] - Resets Gravity",
+	"baseballbat/bat - Gives base ball bat",
+	"superknife/sknife - Gives one hit Knife",
+	"superhammer/shammer - Gives one hit Hammer",
+	"setfirespeed/firespeed/fs - Sets weapon firespeed",
+	"autofire [On/Off] - Set the gun to auto/semi",
+	"bullets/burst [Ammount] - Sets bullet ammount",
+	"reloadtime [Ammount] - Sets reload time",
+	"allguns/guns/gun/g - Gives all guns",
+	"alltools/tools - Gives all tools",
+	"autoguns/autog [On/Off] - Gives guns all the time",
+	"autotools/autot [On/Off] - Gives all tools all the time",
+	"taserbypass/antitase [On/Off] - Taser bypass",
+	"nodoors/doors [On/Off] - Destroys/Restores the doors",
+	"nowalls/walls [On/Off] - Destroys/Restrores the walls",
+	"antifall/antivoid [On/Off] - Prevents from falling under the map",
+	"antishield/noshield [On/Off] - Destroys/Restores players shields",
+	"forcefield/ff [On/Off] - Gives forcefield to protect against guns or tools",
+	"grabshield/takeshield [Player] - Takes players shield if they have one",
+	"gatetower - Teleport to gate tower",
+	"tower - Teleport to tower",
+	"sewer - Teleport to sewer",
+	"backnexus - Teleport to back nexus",
+	"nexus - Teleport to nexus",
+	"gate - Teleport to gate room",
+	"armory - Teleport to armory",
+	"cafe - Teleport to cafe",
+	"criminalbase/crimbase/base - Teleport to criminals base",
+	"lunchroom - Teleport to lunch room",
+	"chat [Message] - Sends message",
+	"spamchat [Delay] - Spams chat",
+	"saveposition/savepos - Save position to load",
+	"loadposition/loadpos - Loads saved position",
+	"notify [On/Off] - Notifies if player has left or joined",
+	"opengate - Opens the gate"
+}
+
+local Tools = {
+	[1] = "M4A1",
+	[2] = "Remington 870",
+	[3] = "AK-47",
+	[4] = "M9"
+}
+
+--// Set up:
+for i, v in pairs(Commands) do
+	local clone = CmdText:Clone()
+	clone.Text = v
+	clone.Name = "COMMANDS"
+	clone.Parent = CmdHandler
+end
+if DisableScript then DisableScript() end
+
+--// Functions:
+local function GetPosition()
+	if LocalPlayer.Character ~= nil and LocalPlayer.Character:findFirstChild("HumanoidRootPart") and LocalPlayer.Character.HumanoidRootPart.Position.Y > 0 then
+		Position = LocalPlayer.Character.HumanoidRootPart.CFrame
+		CameraPosition = workspace.CurrentCamera.CFrame
+	end
+end
+local function Pad(Player)
+	CrimPad.Transparency = 1
+	CrimPad.CanCollide = false
+	CrimPad.CFrame = Player.Character.HumanoidRootPart.CFrame
+	task.wait(.2)
+	CrimPad.CFrame = CFrame.new(-920.510803, 92.2271957, 2138.27002, 0, 0, -1, 0, 1, 0, 1, 0, 0)
+	CrimPad.Transparency = 0
+	CrimPad.CanCollide = false
+end
+local function Respawn(Team)
+	if Team == "Bright blue" then
+		if LocalPlayer.TeamColor.Name ~= "Bright blue" and #Teams.Guards:GetPlayers() == 8 then
+			print("Cannot become guard.")
+		elseif LocalPlayer.TeamColor.Name == "Bright blue" and #Teams.Guards:GetPlayers() == 8 then
+			TeamEvent:FireServer("Bright orange")
+			LocalPlayer.CharacterAppearanceLoaded:Wait()
+			TeamEvent:FireServer("Bright blue")
+		elseif #Teams.Guards:GetPlayers() < 8 then
+			TeamEvent:FireServer("Bright blue")
+		end
+	elseif Team == "Bright orange" then
+		TeamEvent:FireServer("Bright orange")
+	elseif Team == "Really red" then
+		if LocalPlayer.TeamColor.Name == "Bright blue" then
+			Pad(LocalPlayer)
+		elseif #Teams.Guards:GetPlayers() < 8 then
+			TeamEvent:FireServer("Bright blue")
+			LocalPlayer.CharacterAppearanceLoaded:Wait()
+			Pad(LocalPlayer)
+		else
+			TeamEvent:FireServer("Bright orange")
+			LocalPlayer.CharacterAppearanceLoaded:Wait()
+			Pad(LocalPlayer)
+		end
+	end
+end
+local function Chat(Message)
+	ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer(Message, "All")
+end
+local function GetItem(Item)
+	task.spawn(ItemHandler.InvokeServer, ItemHandler, {Position = LocalPlayer.Character.Head.Position, Parent = Item})
+end
+local function Kill(Player)
+	pcall(function()
+		if Player.TeamColor.Name ~= LocalPlayer.TeamColor.Name and not Player.Character:findFirstChildOfClass("ForceField") and Players:findFirstChild(Player.Name) and Player.Character:findFirstChild("Humanoid") and Player.Character.Humanoid.Health > 0 and not table.find(Excluded, Player.Name) then
+			task.wait(.1)
+			GetItem(PrisonITEMS.giver[Tools[4]])
+			local Tool = LocalPlayer.Backpack:findFirstChild("M9")
+			if Tool then
+				local ShootTable = {}
+				for i = 1, math.ceil(Player.Character.Humanoid.Health/10) do
+					ShootTable[#ShootTable+1] = {
+						["RayObject"] = Ray.new(Vector3.new(), Vector3.new()), ["Distance"] = 1, ["Cframe"] = CFrame.new(), ["Hit"] = Player.Character.Head
+					}
+				end
+				ShootEvent:FireServer(ShootTable, Tool)
+				for i = 1, 3 do ReloadEvent:FireServer(Tool) end
+			end
+		end
+	end)
+end
+local function KillTeam(Team)
+	pcall(function()
+		for i, v in pairs(Team:GetPlayers()) do
+			Kill(v)
+		end
+	end)
+end
+local function Tase(Player)
+	pcall(function()
+		if not Player.Character:findFirstChildOfClass("ForceField") and Players:findFirstChild(Player.Name) and Player.Character:findFirstChild("Humanoid") and Player.Character.Humanoid.Health > 0 and not table.find(Excluded, Player.Name) then
+			local OldTeam = LocalPlayer.TeamColor.Name
+			if LocalPlayer.TeamColor.Name ~= "Bright blue" then Respawn("Bright blue") end
+			task.wait(.2)
+			local Tool = LocalPlayer.Backpack:findFirstChild("Taser")
+			if Tool then
+				local ShootTable = {}
+				ShootTable[#ShootTable+1] = {
+					["RayObject"] = Ray.new(Vector3.new(), Vector3.new()), ["Distance"] = 1, ["Cframe"] = CFrame.new(), ["Hit"] = Player.Character.Head
+				}
+				ShootEvent:FireServer(ShootTable, Tool)
+				ReloadEvent:FireServer(Tool)
+			end
+			if LocalPlayer.TeamColor.Name ~= OldTeam then
+				Respawn(OldTeam)
+			end
+		end
+	end)
+end
+local function CharacterAdded(Character)
+	if Character then
+		local Humanoid = Character:waitForChild("Humanoid", 1)
+		local Root = Character:waitForChild("HumanoidRootPart", 1)
+		if Humanoid then
+			if States.AutoRespawn then
+				Humanoid.Died:Connect(function() Respawn(LocalPlayer.TeamColor.Name) end)
+				Humanoid:SetStateEnabled(Enum.HumanoidStateType.FallingDown, false)
+				Humanoid:SetStateEnabled(Enum.HumanoidStateType.Ragdoll, false)
+			end
+			if Root then
+				task.wait(.1)
+				LocalPlayer.Character.HumanoidRootPart.CFrame = Position
+				workspace.CurrentCamera:GetPropertyChangedSignal("CFrame"):Wait()
+				workspace.CurrentCamera.CFrame = CameraPosition
+				if States.AutoGuns then
+					task.wait(.5)
+					if Swat then GetItem(PrisonITEMS.giver[Tools[1]]) end
+					GetItem(PrisonITEMS.giver[Tools[2]])
+					GetItem(PrisonITEMS.giver[Tools[3]])
+					GetItem(PrisonITEMS.giver[Tools[4]])
+				end
+			end
+		end
+	end
+end
+function GetRegion(Player)
+	local RegionModule = require(game.ReplicatedStorage.Modules_client.RegionModule_client)
+	if RegionModule.findRegion(Player.Character) then
+		return RegionModule.findRegion(Player.Character)["Name"]
+	end
+end
+local function ArrestPlayer(Player)
+	if Player.Character and Player.Character:FindFirstChild("Humanoid") and Player.Character.Humanoid.Health > 0 and not table.find(Excluded, Player.Name) then
+		if GetRegion(Player) == "Prison" or GetRegion(Player) == "Administration" or Player.TeamColor.Name == "Really red" and Player.TeamColor.Name ~= "Bright blue" then
+			GetPosition()
+			repeat task.wait()
+				LocalPlayer.Character.HumanoidRootPart.CFrame = Player.Character.Head.CFrame
+				Arrest:InvokeServer(Player.Character.Head)
+			until Player.Character.Head:FindFirstChild("handcuffedGui") or Player.Character.Humanoid.Health == 0 or Player.TeamColor.Name == "Bright blue" or GetRegion(Player) ~= "Prison" or GetRegion(Player) ~= "Administration"
+			LocalPlayer.Character.HumanoidRootPart.CFrame = Position
+		end
+	end
+end
+local function TimeOut()
+	GetItem(PrisonITEMS.giver[Tools[4]])
+	task.wait(.2)
+	for i = 1, math.random(4000, 5000) do ShootEvent:FireServer({}, LocalPlayer.Backpack:findFirstChild("M9")) end
+end
+local function EditStates(Tool, State, Value)
+	if Tool then require(Tool.GunStates)[State] = Value end
+end
+local function SuperTool(Tool)
+	if Tool then
+		local Cooldown = false
+		local Hitting = false
+		local Hitted = false
+		Tool.Equipped:Connect(function()
+			Tool.Activated:Connect(function()
+				if not Cooldown then
+					Cooldown = true
+					Hitting = true
+					for i, v in pairs(Tool:GetChildren()) do 
+						if v:IsA("Part") then
+							v.Touched:Connect(function(Hit)
+								if Players:findFirstChild(Hit.Parent.Name) and Hit and Hit.Parent ~= LocalPlayer and not Hitted and Hitting then
+									Hitted = true
+									for i = 1, 5 do
+										MeleeEvent:FireServer(Players[Hit.Parent.Name], {Name = "Crude Knife"})
+									end
+								end
+							end)
+						end
+					end
+					wait(0.5)
+					Cooldown = false
+					Hitting = false
+					Hitted = false
+				end
+			end)
+		end)
+	end
+end
+for i, v in pairs(workspace:GetDescendants()) do
+	if v.Name:find("wall") or v.Name:find("building") or v.Name:find("front") or v.Name:find("fence") or v.Name:find("gate") or v.Name:find("window") or v.Name:find("glass") then
+		if v:IsA("BasePart") or v:IsA("Model") and not v:IsA("MeshPart") then
+			table.insert(Walls,{v, v.Parent})
+		end
+	end
+end
+
+--// Chat Commands:
+local function GetPlayer(GetPlayer)
+	local Player = nil
+	local Strl = GetPlayer:lower()
+	for i, v in pairs(Players:GetPlayers()) do
+		if tostring(string.lower(v.Name):sub(1, #GetPlayer)) == Strl or tostring(string.lower(v.DisplayName):sub(1, #GetPlayer)) == Strl then Player = v end
+	end
+	return Player
+end
+local function FindCommand(Command)
+	return Args[1] == Prefix..Command
+end
+local function ChangePrefix(Value)
+	Prefix = Value
+end
+local function ChatCommands(ExecuteCommands)
+	if ScriptDisabled then return end
+	Args = ExecuteCommands:split(" ")
+	
+	if FindCommand("unload") then
+		CmdGui:Destroy()
+		LoopKill, Excluded, LoopTase, Admin, Walls, States = {},{},{},{},{},{}
+		ScriptDisabled = true
+	end
+	if FindCommand("team") or FindCommand("t") then
+		if Args[2] == "guard" or Args[2] == "g" then
+			Respawn("Bright blue")
+		elseif Args[2] == "inmate" or Args[2] == "i" then
+			Respawn("Bright orange")
+		elseif Args[2] == "criminal" or Args[2] == "crim" or Args[2] == "c" then
+			Respawn("Really red")
+		end
+	end
+	if FindCommand("respawn") or FindCommand("refresh") or FindCommand("re") then
+		Respawn(LocalPlayer.TeamColor.Name)
+	end
+	if FindCommand("walkspeed") or FindCommand("speed") or FindCommand("ws") then
+		LocalPlayer.Character.Humanoid.WalkSpeed = Args[2]
+	end
+	if FindCommand("jumppower") or FindCommand("jp") then
+		LocalPlayer.Character.Humanoid.JumpPower = Args[2]
+	end
+	if FindCommand("hipheight") or FindCommand("hh") then
+		LocalPlayer.Character.Humanoid.HipHeight = Args[2]
+	end
+	if FindCommand("setgravity") or FindCommand("gravity") then
+		if tonumber(Args[2]) ~= nil then
+			workspace.Gravity = tonumber(Args[2])
+		end
+	end
+	if FindCommand("resetgravity") then
+		workspace.Gravity = 196.2
+	end
+	if FindCommand("allguns") or FindCommand("guns") or FindCommand("gun") or FindCommand("g") then
+		if Swat then GetItem(PrisonITEMS.giver[Tools[1]]) end
+		GetItem(PrisonITEMS.giver[Tools[2]])
+		GetItem(PrisonITEMS.giver[Tools[3]])
+		GetItem(PrisonITEMS.giver[Tools[4]])
+	end
+	if FindCommand("alltools") or FindCommand("tools") then
+		if Swat then GetItem(PrisonITEMS.giver[Tools[1]]) end
+		GetItem(PrisonITEMS.giver[Tools[2]])
+		GetItem(PrisonITEMS.giver[Tools[3]])
+		GetItem(PrisonITEMS.giver[Tools[4]])
+		if LocalPlayer.TeamColor.Name == "Bright blue" then
+			if Swat then
+				GetItem(PrisonITEMS.giver["Riot Shield"])
+			end
+		else
+			GetItem(PrisonITEMS.giver["Crude Knife"])
+			GetItem(PrisonITEMS.single["Hamer"])
+		end
+	end
+	--// Gun Modification:
+	if FindCommand("autofire") then
+		local Tool = LocalPlayer.Character:findFirstChildOfClass("Tool")
+		if Tool:findFirstChild("GunStates") then
+			if Args[2] == "on" then
+				EditStates(Tool, "AutoFire", true)
+			elseif Args[2] == false then
+				EditStates(Tool, "AutoFire", false)
+			end
+		end
+	end
+	if FindCommand("firespeed") then
+		local Tool = LocalPlayer.Character:findFirstChildOfClass("Tool")
+		if Tool:findFirstChild("GunStates") then
+			EditStates(Tool, "FireRate", tonumber(Args[2]))
+		end
+	end
+	if FindCommand("bullets") or FindCommand("burst") then
+		local Tool = LocalPlayer.Character:findFirstChildOfClass("Tool")
+		if Tool:findFirstChild("GunStates") then
+			EditStates(Tool, "Bullets", tonumber(Args[2]))
+		end
+	end
+	if FindCommand("reloadtime") then
+		local Tool = LocalPlayer.Character:findFirstChildOfClass("Tool")
+		if Tool:findFirstChild("GunStates") then
+			EditStates(Tool, "ReloadTime", tonumber(Args[2]))
+		end
+	end
+	if FindCommand("superknife") or FindCommand("sknife") then
+		GetItem(PrisonITEMS.single["Crude Knife"])
+		task.wait(.1)
+		SuperTool(LocalPlayer.Backpack:FindFirstChild("Crude Knife"))
+	end
+	if FindCommand("superhammer") or FindCommand("shammer") then
+		GetItem(PrisonITEMS.single["Hammer"])
+		task.wait(.1)
+		SuperTool(LocalPlayer.Backpack:FindFirstChild("Hammer"))
+	end
+	if FindCommand("baseballbat") or FindCommand("bat") then
+		local Bat = Instance.new("Tool", LocalPlayer.Backpack)
+		local Handle = Instance.new("Part", Bat)
+		Bat.GripPos = Vector3.new(0, -1.15, 0)
+		Bat.Name = "Bat"
+		Handle.Name = "Handle"
+		Handle.Size = Vector3.new(.4, 5, .4)
+		local Animation =Instance.new("Animation", Bat)
+		Animation.AnimationId = "rbxassetid://218504594"
+		local Track = LocalPlayer.Character.Humanoid:LoadAnimation(Animation)
+		local Cooldown = false
+		local Attacked = false
+		local Attacking = false
+		Bat.Equipped:Connect(function()
+			Bat.Activated:Connect(function()
+				if not Cooldown then
+					Cooldown = true
+					Attacking = true
+					Track:Play()
+					Handle.Touched:Connect(function(Hit)
+						if Players:findFirstChild(Hit.Parent.Name) and Hit.Parent ~= game.Players.LocalPlayer and not Attacked and Attacking then
+							Attacked = true
+							for i = 1, 5 do
+								MeleeEvent:FireServer(game.Players[Hit.Parent.Name], {Name = "Crude Knife"})
+							end
+						end
+					end)
+					wait(0.5)
+					Cooldown = false
+					Attacked = false
+					Attacking = false
+				end
+			end)
+		end)
+	end
+	
+	--// Player:
+	if FindCommand("kill") or FindCommand("k") then
+		if Args[2] == "others" or Args[2] == "all" then
+			KillTeam(Players)
+		elseif Args[2] == "guards" or Args[2] == "g" then
+			KillTeam(Teams.Guards)
+		elseif Args[2] == "inmates" or Args[2] == "i" then
+			KillTeam(Teams.Inmates)
+		elseif Args[2] == "criminals" or Args[2] == "crims" or Args[2] == "c" then
+			KillTeam(Teams.Criminals)
+		else
+			Kill(GetPlayer(Args[2]))
+		end
+	end
+	if FindCommand("tase") then
+		Tase(GetPlayer(Args[2]))
+	end
+	if FindCommand("loopkill") or FindCommand("lk") then
+		if GetPlayer(Args[2]) ~= nil and not table.find(LoopKill, GetPlayer(Args[2])) then
+			LoopKill[GetPlayer(Args[2]).UserId] = {Player = GetPlayer(Args[2])}
+		end
+	end
+	if FindCommand("unloopkill") or FindCommand("unlk") then
+		if GetPlayer(Args[2]) ~= nil and table.find(LoopKill, GetPlayer(Args[2])) then
+			LoopKill[GetPlayer(Args[2]).UserId] = nil
+		end
+	end
+	if FindCommand("clearloopkill") or FindCommand("clk") then
+		LoopKill = {}
+	end
+	if FindCommand("exclude") or FindCommand("ex") then
+		if GetPlayer(Args[2]) ~= nil and not table.find(Excluded, GetPlayer(Args[2])) then
+			table.insert(Excluded, GetPlayer(Args[2]))
+		end
+	end
+	if FindCommand("unexclude") or FindCommand("unex") then
+		if GetPlayer(Args[2]) ~= nil and table.find(Excluded, GetPlayer(Args[2])) then
+			table.remove(Excluded, GetPlayer(Args[2]))
+		end
+	end
+	if FindCommand("clearexcluded") or FindCommand("ce") then
+		Excluded = {}
+	end
+	if FindCommand("teleport") or FindCommand("goto") or FindCommand("to") then
+		LocalPlayer.Character.HumanoidRootPart.CFrame = GetPlayer(Args[2])
+	end
+	if FindCommand("spectate") or FindCommand("view") then
+		if GetPlayer(Args[2]) ~= nil then
+			Watching = GetPlayer(Args[2])
+		end
+	end
+	if FindCommand("unspectate") or FindCommand("unview") then
+		Watching = nil
+		workspace.CurrentCamera.CameraSubject = LocalPlayer.Character
+	end
+	if FindCommand("admin") or FindCommand("giveadmin") then
+		if GetPlayer(Args[2]) ~= nil and not Admin[GetPlayer(Args[2]).UserId] then
+			table.insert(Admin, GetPlayer(Args[2]).UserId)
+			Chat("/w "..GetPlayer(Args[2]).Name.." You've got admin permissions! Type "..Prefix.."cmds or "..Prefix.."cmd to see all commands")
+		end
+	end
+	if FindCommand("unadmin") or FindCommand("removeadmin") then
+		local Player = GetPlayer(Args[2])
+		if Player ~= nil and Admin[Player.UserId] then
+			Admin[Player.UserId] = nil
+			Chat("/w "..Player.Name.." You are bad you've been removed admin permissions")
+		end
+	end
+	if FindCommand("arrest") or FindCommand("arr") then
+		ArrestPlayer(GetPlayer(Args[2]))
+	end
+
+	--// Toggles:
+	if FindCommand("autorespawn") or FindCommand("autorefresh") or FindCommand("autore") or FindCommand("auto") then
+		if Args[2] == "on" then
+			States.AutoRespawn = true
+		elseif Args[2] == "off" then
+			States.AutoRespawn = false
+		end
+	end
+	if FindCommand("autoguns") or FindCommand("autog") then
+		if Args[2] == "on" then
+			States.AutoGuns = true
+		elseif Args[2] == "off" then
+			States.AutoGuns = false
+		end
+	end
+	if FindCommand("fastpunch") or FindCommand("fp") then
+		if Args[2] == "on" then
+			States.FastPunch = true
+		elseif Args[2] == "off" then
+			States.FastPunch = false
+		end
+	end
+	if FindCommand("antivoid") or FindCommand("antifell") then
+		if Args[2] == "on" then
+			States.AntiVoid = true
+		elseif Args[2] == "off" then
+			States.AntiVoid = false
+		end
+	end
+	if FindCommand("killaura") or FindCommand("ka") then
+		if Args[2] == "on" then
+			States.KillAura = true
+		elseif Args[2] == "off" then
+			States.KillAura = false
+		end
+	end
+	if FindCommand("notify") then
+		if Args[2] == "on" then
+			States.Notify = true
+		elseif Args[2] == "off" then
+			States.Notify = false
+		end
+	end
+	if FindCommand("taserbypass") or FindCommand("antitase") then
+		if Args[2] == "on" then
+			if workspace.Remote:findFirstChild("tazePlayer") then
+				local Clone = TazePlayer:Clone()
+				TazePlayer.Parent = Lighting
+				Clone.Parent = workspace.Remote
+			end
+		elseif Args[2] == "off" then
+			if Lighting:findFirstChild("tazePlayer") then
+				workspace.Remote.tazePlayer:Destroy()
+				Lighting.tazePlayer.Parent = workspace.Remote
+			end
+		end
+	end
+	if FindCommand("noclip") then
+		States.Noclip = true
+	end
+	if FindCommand("clip") then
+		States.Noclip = false
+	end
+	if FindCommand("nodoors") then
+		if workspace:FindFirstChild("Doors") then
+			workspace.Doors.Parent = Lighting
+		end
+	end
+	if FindCommand("doors") then
+		if Lighting:FindFirstChild("Doors") then
+			Lighting.Doors.Parent = workspace
+		end
+	end
+	if FindCommand("walls") then
+		if Args[2] == "on" then
+			for _,v in pairs(Walls) do
+				v[1].Parent = v[2]
+			end
+		elseif Args[2] == "off" then
+			for _,v in pairs(Walls) do
+				v[1].Parent = Lighting
+			end
+		end
+	end
+	
+	--// Teleports:
+	if FindCommand("nexus") then
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(957, 99, 2361)
+	end
+	if FindCommand("cafe") then
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(877, 100, 2256)
+	end
+	if FindCommand("backnexus") then
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(982, 100, 2334)
+	end
+	if FindCommand("criminalbase") or FindCommand("crimbase") or FindCommand("base") then
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(943, 95, 2055)
+	end
+	if FindCommand("armory") then
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(789, 100, 2260)
+	end
+	if FindCommand("lunchroom") then
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(905, 100, 2226)
+	end
+	if FindCommand("gate") then
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(505, 103, 2250)
+	end
+	if FindCommand("tower") then
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(822, 131, 2588)
+	end
+	if FindCommand("gatetower") then
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(502, 126, 2306)
+	end
+	if FindCommand("sewer") then
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(916, 79, 2311)
+	end
+	
+	--// Extras:
+	if FindCommand("prefix") or FindCommand("pref") then
+		if Args[2] ~= nil then
+			ChangePrefix(Args[2])
+		end
+		Execute.PlaceholderText = "Press "..Prefix.." To Enter"
+	end
+	if FindCommand("leaveserver") or FindCommand("leave") or FindCommand("quit") then
+		game:ShutDown()
+	end
+	if FindCommand("rejoin") or FindCommand("rj") then
+		game:GetService("TeleportService"):Teleport(game.PlaceId, game.Players.LocalPlayer)
+	end
+	if FindCommand("opengate") then
+		GetItem(PrisonITEMS.buttons["Prison Gate"]["Prison Gate"])
+	end
+	if FindCommand("getposition") or FindCommand("getpos") then
+		print("HumanoidRootPart Position: "..LocalPlayer.Character.HumanoidRootPart.Position)
+		print("Camera CFrame: "..workspace.CurrentCamera.CFrame)
+	end
+	if FindCommand("saveposition") or FindCommand("savepos") then
+		States.SavedPosition = LocalPlayer.Character.HumanoidRootPart.CFrame
+	end
+	if FindCommand("loadposition") or FindCommand("loadpos") then
+		if States.SavedPosition ~= nil then
+			LocalPlayer.Character.HumanoidRootPart.CFrame = States.SavedPosition
+		end
+	end
+	if FindCommand("spamchat") then
+		States.SpamChat = true
+		if States.SpamChat then
+			local SpamMessage = {
+				"I'm your dad",
+				"I'm your mom",
+				"I'm a god and I'm your dad",
+				"__________",
+				"OMG",
+				"OML",
+				"BEPP BOP BEEP BEEP BOP",
+				" ",
+				"I'm magic guy because i pressed W,A,S and D on my keyboard and my character can be walked wow, I'M THE REAL MAGIC GUY!",
+				"I'M THE MOST PRO IN HERE",
+				"I'M A PRO IN THIS SERVER ALL OF YOU ARE NOOB!",
+				"LOL XD LOL XD LOL XD",
+				"Read my chat",
+				"Can you die while you are died?",
+				"You know what, I'm a god",
+				"Sub to CXZ NAME_R",
+				"WOW",
+				"wow"
+			}
+			pcall(function()
+				while task.wait() do
+					Chat(SpamMessage[math.random(1, #SpamMessage)])
+				end
+			end)
+		end
+	end
+	if FindCommand("unspamchat") then
+		States.SpamChat = false
+	end
+	if FindCommand("timeout") or FindCommand("crash") or FindCommand("disconnect") then
+		TimeOut()
+	end
+end
+
+--// Connections:
+
+--// Spawn Functions:
+task.spawn(function()
+	while task.wait() do
+		if Watching ~= nil then
+			pcall(function() workspace.CurrentCamera.CameraSubject = workspace[Watching.Name] end)
+		end
+	end
+end)
+task.spawn(function()
+	pcall(function()
+		while task.wait() do
+			if States.Noclip then
+				LocalPlayer.Character.Torso.CanCollide = false
+				LocalPlayer.Character.Head.CanCollide = false
+			end
+		end
+	end)
+end)
+task.spawn(function()
+	pcall(function()
+		while task.wait() do
+			if States.AntiVoid then
+				if LocalPlayer.Character.HumanoidRootPart.Position.Y <= 4 then
+					LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(957, 99, 2361)
+				end
+			end
+		end
+	end)
+end)
+task.spawn(function()
+	while wait() do
+		for i,v in pairs(LoopKill) do
+			pcall(function()
+				Kill(v.Player)
+			end)
+		end
+	end
+end)
+task.spawn(function()
+	while wait() do
+		if States.Fast_Punch == true then
+			pcall(function()
+				getsenv(LocalPlayer.Character.ClientInputHandler).cs.isFighting = false
+			end)
+		end
+	end
+end)
+task.spawn(function()
+	pcall(function()
+		while task.wait() do
+			if States.KillAura then
+				for i, v in pairs(Players:GetPlayers()) do
+					if v.Name ~= LocalPlayer.Name and v.Character:findFirstChild("Humanoid") and not v.Character:findFirstChild("ForceField") and v.Character.Humanoid.Health > 0 and not table.find(Excluded, v.Name) then
+						if (LocalPlayer.Character.HumanoidRootPart.Position - v.Character.PrimaryPart.Position).Magnitude <= 13.5 then
+							for i = 1, 5 do
+								MeleeEvent:FireServer(v, {Name = "Crude Knife"})
+							end
+						end
+					end
+				end
+			end
+		end
+	end)
+end)
+
+--// Extras:
+LocalPlayer.Chatted:Connect(ChatCommands)
+LocalPlayer.CharacterAdded:Connect(CharacterAdded)
+LocalPlayer.CharacterRemoving:Connect(GetPosition)
+Players.PlayerRemoving:Connect(function(Player)
+	if States.Notify then
+		game.StarterGui:SetCore("SendNotification", {
+			Title = "Game",
+			Text = Player.DisplayName.." Has left the game",
+			Icon = Players:GetUserThumbnailAsync(Player.UserId, Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size352x352)
+		})
+	end
+end)
+Players.PlayerAdded:Connect(function(Player)
+	if LoopKill[Player.UserId] then LoopKill[Player.UserId] = {Player = Player} end
+	if Excluded[Player.UserId] then Excluded[Player.UserId] = {Player = Player} end
+	if Admin[Player.UserId] then Admin[Player.UserId] = {Player = Player} end
+	if States.Notify then
+		game.StarterGui:SetCore("SendNotification", {
+			Title = "Game",
+			Text = Player.DisplayName.." Joined",
+			Icon = game.Players:GetUserThumbnailAsync(Player.UserId, Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size352x352)
+		})
+	end
+end)
+
+FindCmd.Changed:Connect(function()
+	if FindCmd.Text ~= "" then
+		for i,v in pairs(CmdHandler:GetChildren()) do
+			if v:IsA("TextLabel") then
+				if not string.lower(v.Text):match(string.lower(FindCmd.Text)) then
+					v.Parent = Background
+					v.Visible = false
+				end
+			end
+		end
+		for i,v in pairs(Background:GetChildren()) do
+			if v.Name == "COMMANDS" then
+				if string.lower(v.Text):match(string.lower(FindCmd.Text)) then
+					v.Parent = CmdHandler
+					v.Visible = true
+				end
+			end
+		end
+	elseif FindCmd.Text == "" and (#CmdHandler:GetChildren()-1) ~= #Commands  then
+		for i,v in pairs(CmdHandler:GetChildren()) do
+			if v:IsA("TextLabel") then
+				v:Destroy()
+			end
+		end
+		for i,v in pairs(Background:GetChildren()) do
+			if v.Name == "COMMANDS" then
+				v:Destroy()
+			end
+		end
+		for i,v in pairs(Commands) do
+			local clone = CmdText:Clone()
+			clone.Text = v
+			clone.Name = "COMMANDS"
+			clone.Parent = CmdHandler
+		end
+	end
+end)
+
+Mouse.KeyDown:Connect(function(Key)
+	if Key == Prefix then
+		if Prefix ~= "/" then
+			Execute:CaptureFocus()
+		end
+	end
+end)
+
+Execute.FocusLost:Connect(function(FocusLost)
+	if FocusLost then
+		if Execute.Text:sub(1,#Prefix) ~= Prefix then
+			ChatCommands(Prefix..Execute.Text)
+		else
+			ChatCommands(Execute.Text)
+		end
+	end
+end)
+getgenv().DisableScript = function()
+	pcall(function()
+		CmdGui:Destroy()
+		States = {}
+		LoopKill = {}
+		LoopTase = {}
+		Admin = {}
+		ScriptDisabled = true
+		for i,v in pairs(game.Lighting:GetChildren()) do
+			v.Parent = workspace
+		end
+		Chat("Unloaded")
+	end)
+end
+
+LocalPlayer.Character:BreakJoints()
+Respawn(LocalPlayer.TeamColor.Name)
