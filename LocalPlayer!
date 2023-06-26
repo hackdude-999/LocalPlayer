@@ -367,7 +367,7 @@ local function Kill(Player)
 					}
 				end
 				ShootEvent:FireServer(ShootTable, Tool)
-				ReloadEvent:FireServer(Tool)
+				for i = 1, 2 do ReloadEvent:FireServer(Tool) end
 			end
 		end
 	end)
@@ -930,15 +930,6 @@ task.spawn(function()
 		for i,v in pairs(LoopKill) do
 			pcall(function()
 				Kill(v.Player)
-			end)
-		end
-	end
-end)
-task.spawn(function()
-	while wait() do
-		if States.Fast_Punch == true then
-			pcall(function()
-				getsenv(LocalPlayer.Character.ClientInputHandler).cs.isFighting = false
 			end)
 		end
 	end
