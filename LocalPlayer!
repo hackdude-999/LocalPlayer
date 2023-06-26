@@ -693,7 +693,7 @@ local function ChatCommands(ExecuteCommands)
 		Excluded = {}
 	end
 	if FindCommand("teleport") or FindCommand("goto") or FindCommand("to") then
-		LocalPlayer.Character.HumanoidRootPart.CFrame = GetPlayer(Args[2])
+		LocalPlayer.Character.HumanoidRootPart.CFrame = GetPlayer(Args[2]).Character.HumanoidRootPart.CFrame
 	end
 	if FindCommand("spectate") or FindCommand("view") then
 		if GetPlayer(Args[2]) ~= nil then
