@@ -213,7 +213,7 @@ local States = {
 	LPS = false,
 	AntiVoid = false,
 	SavedPosition = nil,
-	
+
 }
 local Commands = {
 	"Version "..Version,
@@ -438,7 +438,7 @@ local function ArrestPlayer(Player)
 			GetPosition()
 			repeat task.wait()
 				LocalPlayer.Character.HumanoidRootPart.CFrame = Player.Character.Head.CFrame
-				Arrest:InvokeServer(Player.Character.Head)
+				task.spawn(Arrest.InvokeServer, Arrest, Player.Character.Torso)
 			until Player.Character.Head:FindFirstChild("handcuffedGui") or Player.Character.Humanoid.Health == 0 or Player.TeamColor.Name == "Bright blue" or GetRegion(Player) ~= "Prison" or GetRegion(Player) ~= "Administration"
 			LocalPlayer.Character.HumanoidRootPart.CFrame = Position
 		end
@@ -509,7 +509,7 @@ end
 local function ChatCommands(ExecuteCommands)
 	if ScriptDisabled then return end
 	Args = ExecuteCommands:split(" ")
-	
+
 	if FindCommand("unload") then
 		CmdGui:Destroy()
 		LoopKill, Excluded, LoopTase, Admin, Walls, States = {},{},{},{},{},{}
@@ -638,7 +638,7 @@ local function ChatCommands(ExecuteCommands)
 			end)
 		end)
 	end
-	
+
 	--// Player:
 	if FindCommand("kill") or FindCommand("k") then
 		if Args[2] == "others" or Args[2] == "all" then
@@ -795,7 +795,7 @@ local function ChatCommands(ExecuteCommands)
 			end
 		end
 	end
-	
+
 	--// Teleports:
 	if FindCommand("nexus") then
 		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(957, 99, 2361)
@@ -827,7 +827,7 @@ local function ChatCommands(ExecuteCommands)
 	if FindCommand("sewer") then
 		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(916, 79, 2311)
 	end
-	
+
 	--// Extras:
 	if FindCommand("prefix") or FindCommand("pref") then
 		if Args[2] ~= nil then
@@ -891,6 +891,9 @@ local function ChatCommands(ExecuteCommands)
 	end
 	if FindCommand("timeout") or FindCommand("crash") or FindCommand("disconnect") then
 		TimeOut()
+	end
+	if FindCommand("cmds") then
+		Background.Visible = true
 	end
 end
 
